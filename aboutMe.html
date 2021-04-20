@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+        <span>
+            {{printMessage()}}
+        </span> <br>
+        <span v-text = "greetings()"></span> 
+        <a v-bind:href = "getDayInfo()">About this date</a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: 
+            {
+                firstname: 'Dima',
+                lastname : 'Gavaza',
+                birthday : '2000-08-03'
+            },
+            methods : 
+            {
+                printMessage : function()
+                {
+                    if((new Date()).toLocaleDateString('en-GB') === this.birthday)
+                    {
+                        return `Happy Birthday ${this.firstname} ${this.lastname}`;
+                    }
+                    else
+                    {
+                        const date1 = Date.parse(this.birthday);
+                        const date2 = Date.now();
+                        const diffTime = Math.abs(date2 - date1);
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)%365); 
+                        return `Sorry, ${this.firstname} ${this.lastname} you need to wait ${diffDays} days`;
+                    }
+                },
+
+                greetings : function()
+                {
+                    let timeNow = new Date().getUTCHours() + 2;
+                    if(timeNow >= 6 && timeNow < 12) return "Good Morning";
+                    else if(timeNow >= 18 && timeNow <= 23) return "Good Evening";
+                    else if(timeNow >= 0 && timeNow <= 5) return "Good Night";
+                    else return "I don't know time";
+                },
+
+                getDayInfo : function()
+                {
+                    let month =  new Intl.DateTimeFormat('en-US', { month: 'long'}).format(Date.parse(this.birthday));
+                    let day = this.birthday.split('-')[2];
+                    return `https://en.wikipedia.org/wiki/${month}_${day}`;
+                }
+            }
+        })
+    </script>
+</body>
+</html>
